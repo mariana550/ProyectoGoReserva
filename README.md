@@ -40,7 +40,7 @@ mvn spring-boot:run
 Prueba: abrir http://localhost:8080/api/ping → `{"estado":"ok","tiposDeCancha":4}`
 
 Al arrancar por primera vez se crea el administrador inicial:
-**admin@goreserva.com / Admin123*** (cámbienlo después).
+**admin@goreserva.com / Admin123***.
 
 Pruebas unitarias: `mvn test`
 
