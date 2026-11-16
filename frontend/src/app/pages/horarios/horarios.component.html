@@ -1,0 +1,112 @@
+    <nav class="ruta" aria-label="Ruta">
+    <a routerLink="/canchas">Canchas</a>
+    <span aria-hidden="true">/</span>
+    <span>{{ cancha()?.nombre ?? '...' }}</span>
+    </nav>
+
+    <!-- ========== Encabezado ========== -->
+    <div class="encabezado">
+    <div>
+        <h1>{{ cancha()?.nombre ?? 'Cargando...' }}</h1>
+        @if (cancha(); as c) {
+        <p>{{ c.tipo }} · {{ c.descripcion }}</p>
+        }
+    </div>
+    <ul class="leyenda" aria-label="Leyenda">
+        <li><span class="punto libre"></span>Disponible</li>
+        <li><span class="punto ocupada"></span>No disponible</li>
+        <li><span class="punto elegida"></span>Tu selección</li>
+    </ul>
+    </div>
+
+    <div class="layout">
+    <div class="columna">
+
+        <!-- ========== 1. Fecha ========== -->
+        <section class="tarjeta">
+        <div class="seccion-titulo">
+            <h2>1. Elige la fecha</h2>
+            <div class="flechas">
+            <button type="button" class="secundario icono" aria-label="Semana anterior"
+                    [disabled]="inicioSemana() === 0" (click)="moverSemana(-1)">‹</button>
+            <button type="button" class="secundario icono" aria-label="Semana siguiente"
+                    [disabled]="inicioSemana() >= 21" (click)="moverSemana(1)">›</button>
+            </div>
+        </div>
+
+        <div class="dias" role="group" aria-label="Días">
+            @for (d of dias(); track d.fecha) {
+            <button type="button" class="dia" [class.activo]="d.fecha === fecha()"
+                    [attr.aria-pressed]="d.fecha === fecha()" (click)="elegirDia(d)">
+                <span class="dia-nombre">{{ d.nombre }}</span>
+                <span class="dia-numero">{{ d.numero }}</span>
+                <span class="dia-mes">{{ d.mes }}</span>
+            </button>
+            }
+        </div>
+        </section>
+
+        <!-- ========== 2. Hora ========== -->
+        <section class="tarjeta">
+        <div class="seccion-titulo">
+            <h2>2. Elige la hora</h2>
+            @if (!cargando() && abierto() && !error()) {
+            <span class="contador">{{ libres() }} franjas libres</span>
+            }
+        </div>
+
+        @if (cargando()) {
+            <p class="estado">Cargando horarios...</p>
+        } @else if (error()) {
+            <p class="alerta-error" role="alert">{{ error() }}</p>
+        } @else if (!abierto()) {
+            <p class="estado">La cancha no abre este día.</p>
+        } @else {
+            <div class="franjas" role="group" aria-label="Horas">
+            @for (f of franjas(); track f.horaInicio) {
+                <button type="button" class="franja"
+                        [class.elegida]="seleccion()?.horaInicio === f.horaInicio"
+                        [disabled]="f.estado !== 'LIBRE'"
+                        [attr.aria-pressed]="seleccion()?.horaInicio === f.horaInicio"
+                        [title]="f.estado === 'OCUPADA' ? 'Ya reservada' : f.estado === 'PASADA' ? 'Esta hora ya pasó' : ''"
+                        (click)="seleccion.set(f)">
+                {{ f.horaInicio }} – {{ f.horaFin }}
+                </button>
+            }
+            </div>
+        }
+        </section>
+    </div>
+
+    <!-- ========== Resumen ========== -->
+    <aside class="tarjeta resumen" aria-label="Resumen">
+        <h2>Tu reserva</h2>
+        <dl>
+        <dt>Cancha</dt>
+        <dd>{{ cancha()?.nombre ?? '—' }}</dd>
+        <dt>Fecha</dt>
+        <dd class="capital">{{ fechaLarga() }}</dd>
+        <dt>Hora</dt>
+        <dd>
+            @if (seleccion(); as s) {
+            {{ s.horaInicio }} – {{ s.horaFin }}
+            } @else {
+            Sin elegir
+            }
+        </dd>
+        <dt>Duración</dt>
+        <dd>1 hora</dd>
+        </dl>
+
+        <div class="total">
+        <span>Total</span>
+        <span>{{ precio(seleccion()?.valor ?? null) }}</span>
+        </div>
+
+        @if (seleccion()) {
+        <button type="button" class="ancho" (click)="continuar()">Continuar</button>
+        } @else {
+        <p class="aviso">Selecciona una hora disponible para continuar.</p>
+        }
+    </aside>
+    </div>

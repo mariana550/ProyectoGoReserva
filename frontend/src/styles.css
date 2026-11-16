@@ -1,0 +1,182 @@
+/* ===== Paleta GoReserva ===== */
+:root {
+    --fondo: #111714;          /* fondo de la página */
+    --superficie: #1A211D;     /* tarjetas */
+    --superficie-2: #222B26;   /* cajas dentro de tarjetas */
+    --barra: #161D19;          /* barra superior */
+    --borde: #2C3530;
+    --verde: #3DB57A;          /* color principal */
+    --verde-hover: #4CC88A;
+    --verde-oscuro: #1F3A2B;   /* fondos verdes suaves */
+    --texto: #EDEFEC;
+    --texto-suave: #B5BDB7;
+    --texto-tenue: #8E9992;
+    --texto-sobre-verde: #0E1A13;
+    --error: #FF8A80;
+
+    --fuente: 'Inter', system-ui, sans-serif;
+    --fuente-titulos: 'Space Grotesk', sans-serif;
+    --radio: 14px;
+}
+
+/* ===== Base ===== */
+* {
+    box-sizing: border-box; 
+}
+body { 
+    margin: 0; 
+    font-family: var(--fuente); 
+    color: var(--texto); 
+    background: var(--fondo); 
+}
+h1, h2, h3 { 
+    font-family: var(--fuente-titulos); 
+    margin: 0; }
+a { 
+    color: var(--verde); 
+}
+a:hover { 
+    color: var(--verde-hover); 
+}
+
+/* ===== Clases login y registro ===== */
+.contenedor { 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 32px 24px; 
+}
+.tarjeta { 
+    background: var(--superficie); 
+    border: 1px solid var(--borde); 
+    border-radius: var(--radio); 
+    padding: 28px; 
+}
+.formulario { 
+    max-width: 420px; 
+    margin: 40px auto; 
+}
+
+label { display: block; 
+    font-weight: 600; 
+    font-size: 14px; 
+    margin: 14px 0 6px; 
+    color: var(--texto-suave);
+}
+input {
+    width: 100%; 
+    height: 44px; 
+    padding: 0 14px; 
+    font: inherit; 
+    font-size: 15px;
+    background: var(--superficie-2); 
+    color: var(--texto);
+    border: 1px solid var(--borde); 
+    border-radius: 8px;
+}
+input:focus { 
+    outline: 2px solid var(--verde); 
+    outline-offset: 1px; 
+}
+
+button, .boton {
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center;
+    min-height: 44px; 
+    padding: 0 22px; 
+    border-radius: 8px; 
+    border: 1px solid var(--verde);
+    background: var(--verde); 
+    color: var(--texto-sobre-verde);
+    font: inherit; 
+    font-size: 15px; 
+    font-weight: 600; 
+    text-decoration: none; 
+    cursor: pointer;
+}
+button:hover, .boton:hover { 
+    background: var(--verde-hover); 
+    color: var(--texto-sobre-verde); 
+}
+button:disabled { 
+    opacity: .5; 
+    cursor: default; 
+}
+button.secundario, 
+.boton.secundario { 
+    background: transparent; 
+    color: var(--verde); 
+}
+button.secundario:hover,
+.boton.secundario:hover { 
+    background: var(--verde-oscuro); 
+    color: var(--verde); 
+}
+
+.ancho { 
+    width: 100%; 
+    margin-top: 20px; 
+}
+.error { 
+    color: var(--error); 
+    font-size: 14px; 
+    margin-top: 10px; 
+}
+.exito { 
+    background: var(--verde-oscuro); 
+    border: 1px solid var(--verde); 
+    border-radius: 8px; 
+    padding: 10px 14px; 
+}
+/* ===== Formularios (login y registro) ===== */
+.formulario h2 { 
+    font-size: 28px; 
+}
+.subtitulo { 
+    margin: 6px 0 8px; 
+    color: var(--texto-suave); 
+    font-size: 15px; 
+}
+.alerta-error {
+    margin-top: 16px; 
+    padding: 10px 14px; 
+    border-radius: 8px; 
+    font-size: 14px;
+    background: #3A1F1F;
+    border: 1px solid #6B3434; 
+    color: var(--error);
+}
+.ayuda { 
+    margin: 6px 0 0; 
+    font-size: 13px; 
+    color: var(--texto-tenue); 
+}
+.pie-form { 
+    margin: 20px 0 0; 
+    text-align: center; 
+    font-size: 14px; 
+    color: var(--texto-suave); 
+}
+.pie-form a { 
+    font-weight: 600; 
+    text-decoration: none; 
+}
+.pie-form a:hover { 
+    text-decoration: underline; 
+}
+.dos-columnas { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+    gap: 0 16px; 
+}
+/* ===== Efecto hover para tarjetas ===== */
+.hover-sube {
+    transition: transform .2s ease, 
+    box-shadow .2s ease, 
+    border-color .2s ease;
+    }
+.hover-sube:hover {
+    transform: translateY(-4px);                   
+    border-color: var(--verde);                    
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .35);   
+}

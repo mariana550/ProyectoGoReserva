@@ -1,0 +1,59 @@
+    :host { display: flex; flex-direction: column; gap: 20px; }
+
+    /* Ruta "Canchas / Cancha 1" */
+    .ruta { font-size: 14px; color: var(--texto-tenue); display: flex; gap: 8px; }
+    .ruta a { text-decoration: none; }
+
+    /* Encabezado */
+    .encabezado { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; }
+    .encabezado h1 { font-size: 36px; }
+    .encabezado p { margin: 6px 0 0; color: var(--texto-suave); }
+    .leyenda { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 16px; font-size: 14px; color: var(--texto-suave); }
+    .leyenda li { display: flex; align-items: center; gap: 6px; }
+    .punto { width: 14px; height: 14px; border-radius: 4px; }
+    .punto.libre { border: 1px solid var(--verde); }
+    .punto.ocupada { background: var(--superficie-2); }
+    .punto.elegida { background: var(--verde); }
+
+    /* Distribución: columna izquierda + resumen a la derecha */
+    .layout { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+    .columna { flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+    .seccion-titulo { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; }
+    h2 { font-size: 20px; }
+    .flechas { display: flex; gap: 8px; }
+    .icono { width: 44px; padding: 0; font-size: 22px; }
+    .contador, .estado { color: var(--texto-suave); font-size: 14px; margin: 0; }
+
+    /* Días */
+    .dias { display: grid; grid-template-columns: repeat(auto-fit, minmax(72px, 1fr)); gap: 8px; }
+    .dia {
+    flex-direction: column; gap: 2px; min-height: 80px; padding: 8px;
+    background: var(--superficie-2); color: var(--texto); border: 1px solid var(--borde);
+    }
+    .dia:hover { background: var(--verde-oscuro); color: var(--texto); }
+    .dia.activo, .dia.activo:hover { background: var(--verde); border-color: var(--verde); color: var(--texto-sobre-verde); }
+    .dia-nombre, .dia-mes { font-size: 12px; font-weight: 500; text-transform: capitalize; }
+    .dia-numero { font-family: var(--fuente-titulos); font-size: 24px; font-weight: 700; }
+
+    /* Franjas de hora */
+    .franjas { display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 10px; }
+    .franja { background: transparent; color: var(--texto); border: 1px solid var(--verde); font-weight: 500; }
+    .franja:hover:not(:disabled) { background: var(--verde-oscuro); color: var(--texto); }
+    .franja.elegida, .franja.elegida:hover { background: var(--verde); color: var(--texto-sobre-verde); font-weight: 600; }
+    .franja:disabled {
+    opacity: 1; background: var(--superficie-2); border-color: var(--superficie-2);
+    color: var(--texto-tenue); text-decoration: line-through; cursor: not-allowed;
+    }
+
+    /* Resumen */
+    .resumen { flex: 1 1 300px; display: flex; flex-direction: column; gap: 16px; }
+    .resumen dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 10px 14px; font-size: 15px; }
+    .resumen dt { color: var(--texto-tenue); }
+    .resumen dd { margin: 0; font-weight: 500; }
+    .capital { text-transform: capitalize; }
+    .total {
+    display: flex; justify-content: space-between; padding-top: 14px;
+    border-top: 1px solid var(--borde); font-size: 18px; font-weight: 700;
+    }
+    .resumen .ancho { margin-top: 0; }
+    .aviso { margin: 0; padding: 12px; border-radius: 8px; background: var(--superficie-2); font-size: 14px; color: var(--texto-suave); }

@@ -1,0 +1,62 @@
+    @if (reserva(); as r) {
+    <!-- ========== Pantalla de éxito ========== -->
+    <section class="tarjeta exito-final" aria-live="polite">
+        <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="32" cy="32" r="30" fill="#1F3A2B" />
+        <path d="M20 33l8 8 16-17" fill="none" stroke="#3DB57A" stroke-width="4"
+                stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <h1>¡Reserva confirmada!</h1>
+        <p>{{ r.cancha }} · <span class="capital">{{ fechaLarga() }}</span> · {{ r.horaInicio }} – {{ r.horaFin }}</p>
+        <p>Código de reserva: <strong class="codigo">{{ r.codigo }}</strong></p>
+        <div class="acciones">
+        <a routerLink="/mis-reservas" class="boton">Ver mis reservas</a>
+        <a routerLink="/canchas" class="boton secundario">Reservar otra</a>
+        </div>
+    </section>
+
+    } @else {
+    <!-- ========== Confirmación ========== -->
+    <a [routerLink]="['/canchas', canchaId, 'horarios']" class="volver">← Cambiar fecha u hora</a>
+    <div>
+        <h1>Confirma tu reserva</h1>
+        <p class="sub">Revisa los datos antes de confirmar.</p>
+    </div>
+
+    @if (cargando()) {
+        <p class="sub">Cargando...</p>
+    } @else if (!franja()) {
+        <p class="alerta-error" role="alert">{{ error() || 'No se encontró la hora elegida.' }}</p>
+        <a [routerLink]="['/canchas', canchaId, 'horarios']" class="boton secundario volver-boton">Elegir otra hora</a>
+    } @else {
+        <section class="tarjeta detalle" aria-label="Detalle">
+        <div><span class="rotulo">CANCHA</span><span>{{ cancha()?.nombre }}</span></div>
+        <div><span class="rotulo">FECHA</span><span class="capital">{{ fechaLarga() }}</span></div>
+        <div><span class="rotulo">HORA</span><span>{{ franja()!.horaInicio }} – {{ franja()!.horaFin }}</span></div>
+        <div><span class="rotulo">TOTAL</span><span class="valor">{{ precio(franja()!.valor) }}</span></div>
+        </section>
+
+        <section class="tarjeta">
+        <h2>Tus datos</h2>
+        <dl class="datos">
+            <dt>Nombre</dt><dd>{{ auth.usuario()?.nombre }}</dd>
+            <dt>Correo</dt><dd>{{ auth.usuario()?.correo }}</dd>
+        </dl>
+        <label class="check">
+            <input type="checkbox" [checked]="acepta()" (change)="acepta.set(!acepta())">
+            Acepto que la reserva es por 1 hora y que debo llegar puntual.
+        </label>
+        </section>
+
+        @if (error()) {
+        <p class="alerta-error" role="alert">{{ error() }}</p>
+        }
+
+        <div class="acciones fin">
+        <a [routerLink]="['/canchas', canchaId, 'horarios']" class="boton secundario">Volver</a>
+        <button type="button" [disabled]="!acepta() || enviando()" (click)="confirmar()">
+            {{ enviando() ? 'Confirmando...' : 'Confirmar reserva' }}
+        </button>
+        </div>
+    }
+    }

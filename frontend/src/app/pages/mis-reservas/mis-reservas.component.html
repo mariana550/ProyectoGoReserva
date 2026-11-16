@@ -1,0 +1,88 @@
+<!-- ========== Encabezado ========== -->
+<div class="encabezado">
+  <div>
+    <h1>Mis reservas</h1>
+    <p>Consulta tus reservas o cancela las que aún no han empezado.</p>
+  </div>
+  <a routerLink="/canchas" class="boton">Nueva reserva</a>
+</div>
+
+<!-- ========== Pestañas ========== -->
+<div class="pestanas" role="tablist" aria-label="Filtrar reservas">
+  <button type="button" role="tab" class="pestana" [class.activa]="pestana() === 'proximas'"
+          [attr.aria-selected]="pestana() === 'proximas'" (click)="pestana.set('proximas')">
+    Próximas <span class="cuenta">{{ proximas().length }}</span>
+  </button>
+  <button type="button" role="tab" class="pestana" [class.activa]="pestana() === 'historial'"
+          [attr.aria-selected]="pestana() === 'historial'" (click)="pestana.set('historial')">
+    Historial <span class="cuenta">{{ historial().length }}</span>
+  </button>
+</div>
+
+@if (mensaje()) {
+  <p class="exito" role="status">{{ mensaje() }}</p>
+}
+@if (error()) {
+  <p class="alerta-error" role="alert">{{ error() }}</p>
+}
+
+<!-- ========== Contenido ========== -->
+@if (cargando()) {
+  <p class="estado">Cargando reservas...</p>
+} @else if (visibles().length === 0) {
+  <div class="tarjeta vacio">
+    @if (pestana() === 'proximas') {
+      <p>No tienes reservas próximas.</p>
+      <a routerLink="/canchas" class="boton">Reservar una cancha</a>
+    } @else {
+      <p>Todavía no tienes reservas en el historial.</p>
+    }
+  </div>
+} @else {
+  <div class="tabla-caja">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Código</th>
+          <th scope="col">Cancha</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Hora</th>
+          <th scope="col">Valor</th>
+          <th scope="col">Estado</th>
+          <th scope="col" class="derecha">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (f of visibles(); track f.id) {
+          <tr>
+            <td class="codigo">{{ f.codigo }}</td>
+            <td>
+              <span class="cancha">{{ f.cancha }}</span>
+              <span class="tipo">{{ f.tipo }}</span>
+            </td>
+            <td class="capital">{{ fechaCorta(f.fecha) }}</td>
+            <td>{{ f.horaInicio }} – {{ f.horaFin }}</td>
+            <td>{{ precio(f.valor) }}</td>
+            <td><span class="badge {{ f.claseEstado }}">{{ f.estadoTexto }}</span></td>
+            <td class="derecha">
+              @if (f.esProxima) {
+                @if (confirmandoId() === f.id) {
+                  <!-- Segundo clic: pide confirmación en la misma fila -->
+                  <div class="confirmar">
+                    <span>¿Seguro?</span>
+                    <button type="button" class="peligro mini" [disabled]="cancelandoId() === f.id" (click)="cancelar(f)">
+                      {{ cancelandoId() === f.id ? 'Cancelando...' : 'Sí, cancelar' }}
+                    </button>
+                    <button type="button" class="secundario mini" (click)="confirmandoId.set(null)">No</button>
+                  </div>
+                } @else {
+                  <button type="button" class="secundario mini" (click)="confirmandoId.set(f.id)">Cancelar</button>
+                }
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

@@ -1,0 +1,66 @@
+    <!-- ========== Encabezado ========== -->
+    <div class="encabezado">
+    <h1>Encuentra tu cancha</h1>
+    <p>Elige el tipo de cancha y luego escoge fecha y hora.</p>
+    </div>
+
+    <!-- ========== Filtros ========== -->
+    <section class="tarjeta filtros">
+    <label for="buscar">Buscar</label>
+    <input id="buscar" type="search" placeholder="Nombre de la cancha"
+            [value]="busqueda()" (input)="buscar($event)">
+
+    <div class="chips" role="group" aria-label="Tipo de cancha">
+        @for (t of tipos(); track t) {
+        <button type="button" class="chip" [class.activo]="t === filtro()"
+                [attr.aria-pressed]="t === filtro()" (click)="filtro.set(t)">
+            {{ t }}
+        </button>
+        }
+    </div>
+    </section>
+
+    <!-- ========== Resultados ========== -->
+    @if (cargando()) {
+    <p class="estado">Cargando canchas...</p>
+    } @else if (error()) {
+    <p class="alerta-error" role="alert">{{ error() }}</p>
+    } @else {
+    <p class="estado">
+        {{ visibles().length }} {{ visibles().length === 1 ? 'cancha encontrada' : 'canchas encontradas' }}
+    </p>
+
+    <div class="grid">
+        @for (c of visibles(); track c.id) {
+        <article class="tarjeta cancha hover-sube">
+            <svg class="portada" viewBox="0 0 300 140" aria-hidden="true">
+            <rect width="300" height="140" fill="#1F3A2B" />
+            <g fill="none" stroke="#3DB57A" stroke-width="2" opacity=".8">
+                <rect x="14" y="14" width="272" height="112" rx="3" />
+                <line x1="150" y1="14" x2="150" y2="126" />
+                <circle cx="150" cy="70" r="20" />
+            </g>
+            </svg>
+
+            <div class="cuerpo">
+            <div class="titulo">
+                <h2>{{ c.nombre }}</h2>
+                <span class="badge">{{ c.tipo }}</span>
+            </div>
+            @if (c.descripcion) {
+                <p class="descripcion">{{ c.descripcion }}</p>
+            }
+
+            <dl class="precios">
+                <div><dt>Diurna</dt><dd>{{ precio(c.tarifaDiurna) }}</dd></div>
+                <div><dt>Nocturna</dt><dd>{{ precio(c.tarifaNocturna) }}</dd></div>
+            </dl>
+
+            <a class="boton ancho" [routerLink]="['/canchas', c.id, 'horarios']">Ver horarios</a>
+            </div>
+        </article>
+        } @empty {
+        <p class="tarjeta vacio">No hay canchas de este tipo por ahora.</p>
+        }
+    </div>
+    }

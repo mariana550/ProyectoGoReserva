@@ -1,0 +1,39 @@
+    :host { display: flex; flex-direction: column; gap: 24px; }
+
+    .encabezado { display: flex; flex-direction: column; gap: 6px; }
+    .encabezado h1 { font-size: 40px; }
+    .encabezado p { margin: 0; color: var(--texto-suave); font-size: 17px; }
+
+    .filtros { padding: 20px; }
+    .filtros label { margin-top: 0; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .chip {
+    border-radius: 999px; background: transparent; color: var(--texto-suave);
+    border: 1px solid var(--borde); font-weight: 500;
+    }
+    .chip:hover { background: var(--superficie-2); color: var(--texto); }
+    .chip.activo, .chip.activo:hover {
+    background: var(--verde); border-color: var(--verde);
+    color: var(--texto-sobre-verde); font-weight: 600;
+    }
+
+    .estado { margin: 0; color: var(--texto-suave); }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 20px; }
+    .cancha { padding: 0; overflow: hidden; display: flex; flex-direction: column; }
+    .portada { display: block; width: 100%; height: auto; }
+    .cuerpo { padding: 20px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+    .titulo { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    .titulo h2 { font-size: 19px; }
+    .badge {
+    padding: 4px 10px; border-radius: 999px; white-space: nowrap;
+    background: var(--verde-oscuro); color: var(--verde); font-size: 13px; font-weight: 600;
+    }
+    .descripcion { margin: 0; color: var(--texto-suave); font-size: 14px; }
+    .precios { margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .precios div { background: var(--superficie-2); border-radius: 8px; padding: 10px 12px; }
+    .precios dt { font-size: 12px; font-weight: 600; color: var(--texto-tenue); }
+    .precios dd { margin: 2px 0 0; font-family: var(--fuente-titulos); font-weight: 700; font-size: 18px; }
+    .cancha .boton { margin-top: auto; }
+
+    .vacio { grid-column: 1 / -1; text-align: center; color: var(--texto-suave); }

@@ -1,0 +1,59 @@
+:host { display: flex; flex-direction: column; gap: 20px; }
+
+/* Encabezado */
+.encabezado { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; }
+.encabezado h1 { font-size: 36px; }
+.encabezado p { margin: 6px 0 0; color: var(--texto-suave); }
+
+/* Pestañas */
+.pestanas { display: flex; gap: 4px; border-bottom: 1px solid var(--borde); }
+.pestana {
+  background: none; border: none; border-radius: 0; margin-bottom: -1px;
+  color: var(--texto-suave); font-weight: 500; gap: 8px;
+  border-bottom: 3px solid transparent;
+}
+.pestana:hover { background: var(--superficie); color: var(--texto); }
+.pestana.activa, .pestana.activa:hover {
+  background: none; color: var(--texto); font-weight: 600; border-bottom-color: var(--verde);
+}
+.cuenta {
+  min-width: 22px; padding: 1px 7px; border-radius: 999px;
+  background: var(--superficie-2); color: var(--texto-suave); font-size: 12px;
+}
+
+.estado { margin: 0; color: var(--texto-suave); }
+
+/* Vacío */
+.vacio { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; padding: 40px 24px; }
+.vacio p { margin: 0; color: var(--texto-suave); }
+
+/* Tabla: en celular se desliza de lado en vez de romper la página */
+.tabla-caja {
+  background: var(--superficie); border: 1px solid var(--borde);
+  border-radius: var(--radio); overflow-x: auto;
+}
+table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 15px; }
+th {
+  text-align: left; padding: 14px 18px; background: var(--superficie-2);
+  font-size: 12px; font-weight: 600; letter-spacing: .04em; color: var(--texto-tenue);
+}
+td { padding: 14px 18px; border-top: 1px solid var(--borde); vertical-align: middle; }
+tbody tr:hover { background: #1E2621; }
+.derecha { text-align: right; }
+.codigo { color: var(--texto-tenue); font-size: 14px; }
+.cancha { display: block; font-weight: 600; }
+.tipo { display: block; font-size: 13px; color: var(--texto-tenue); }
+.capital { text-transform: capitalize; }
+
+/* Estado */
+.badge { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; }
+.badge.confirmada { background: var(--verde-oscuro); color: var(--verde); }
+.badge.finalizada { background: #1F2A36; color: #8DB6E0; }
+.badge.cancelada { background: var(--superficie-2); color: var(--texto-tenue); }
+
+/* Botones de la fila */
+.mini { min-height: 36px; padding: 0 12px; font-size: 14px; }
+.confirmar { display: inline-flex; align-items: center; gap: 8px; }
+.confirmar span { font-size: 14px; color: var(--texto-suave); }
+.peligro { background: #C0483A; border-color: #C0483A; color: #FFFFFF; }
+.peligro:hover { background: #D45A4B; color: #FFFFFF; }
