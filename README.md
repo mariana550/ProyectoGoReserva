@@ -1,7 +1,10 @@
 # GoReserva – Sistema de gestión de reservas para canchas deportivas
 
 Proyecto final de **Gestión de Proyectos de Software** · Universidad de Caldas · 2026-2
-Equipo: Mariana Villegas (Product Owner) · Sebastián Rendón (Scrum Master) · Yobani Arenas Castaño (Desarrollo)
+-- Equipo:
+-- Mariana Villegas (Product Owner) 
+-- Sebastián Rendón (Scrum Master) 
+-- Yobani Arenas Castaño (Desarrollo)
 
 ## Estructura
 
