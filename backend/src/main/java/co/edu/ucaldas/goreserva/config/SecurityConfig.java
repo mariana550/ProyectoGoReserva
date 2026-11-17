@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/canchas/**").hasAnyRole("CLIENTE", "ADMIN")
                 .requestMatchers("/api/reservas/**").hasRole("CLIENTE")
                 .anyRequest().authenticated())
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
