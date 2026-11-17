@@ -138,7 +138,11 @@ public class CanchaService {
         return null;
     }
 
+    /** Nombres de los tipos de cancha para los filtros del catálogo: ["Baloncesto", "Fútbol 5", ...] */
+    @Transactional(readOnly = true)
     public List<String> tipos() {
-        return null;
+        return tipos.findAllByOrderByNombreAsc().stream()
+                .map(TipoCancha::getNombre)
+                .toList();
     }
 }

@@ -19,7 +19,8 @@ import { AuthService } from './core/auth.service';
               <a routerLink="/mis-reservas" routerLinkActive="activo">Mis reservas</a>
             }
             @if (u.rol === 'ADMIN') {
-              <a routerLink="/admin" routerLinkActive="activo">Administración</a>
+              <a routerLink="/admin" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">Reservas</a>
+              <a routerLink="/admin/canchas" routerLinkActive="activo">Canchas y horarios</a>
             }
           } @else {
             <a routerLink="/" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>

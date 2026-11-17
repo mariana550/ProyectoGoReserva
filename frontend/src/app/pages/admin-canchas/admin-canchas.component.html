@@ -1,0 +1,117 @@
+    <!-- ========== Encabezado ========== -->
+    <div class="encabezado">
+    <span class="etiqueta">PANEL DE ADMINISTRACIÓN</span>
+    <h1>Canchas, horarios y precios</h1>
+    <p>Crea, edita y desactiva canchas, define cuándo abren y cuánto cuesta cada franja.</p>
+    <div class="acciones">
+        <button type="button" (click)="nueva()">+ Nueva cancha</button>
+        <a routerLink="/admin" class="boton secundario">Ver reservas</a>
+    </div>
+    </div>
+
+    @if (mensaje()) { <p class="exito" role="status">{{ mensaje() }}</p> }
+    @if (error()) { <p class="alerta-error" role="alert">{{ error() }}</p> }
+
+    <!-- ========== Formulario crear / editar (HU-09 y HU-11) ========== -->
+    @if (formAbierto()) {
+    <form class="tarjeta panel" (ngSubmit)="guardar()">
+        <h2>{{ editandoId() == null ? 'Nueva cancha' : 'Editar cancha' }}</h2>
+        <div class="dos-columnas">
+        <div>
+            <label for="c-nombre">Nombre *</label>
+            <input id="c-nombre" name="nombre" maxlength="80" [(ngModel)]="form.nombre" required>
+        </div>
+        <div>
+            <label for="c-tipo">Tipo *</label>
+            <select id="c-tipo" name="tipo" [(ngModel)]="form.tipo" required>
+            @for (t of tipos(); track t) { <option [value]="t">{{ t }}</option> }
+            </select>
+        </div>
+        </div>
+        <label for="c-desc">Descripción</label>
+        <input id="c-desc" name="descripcion" maxlength="255" placeholder="Ej.: grama sintética, cubierta"
+               [(ngModel)]="form.descripcion">
+        <div class="dos-columnas">
+        <div>
+            <label for="c-diurna">Precio diurno por hora * <span class="tenue">(antes de las 18:00)</span></label>
+            <input id="c-diurna" name="tarifaDiurna" type="number" min="1" step="1000" [(ngModel)]="form.tarifaDiurna" required>
+        </div>
+        <div>
+            <label for="c-nocturna">Precio nocturno por hora * <span class="tenue">(desde las 18:00)</span></label>
+            <input id="c-nocturna" name="tarifaNocturna" type="number" min="1" step="1000" [(ngModel)]="form.tarifaNocturna" required>
+        </div>
+        </div>
+        @if (editandoId() == null) {
+        <p class="ayuda">La cancha nueva abre todos los días de 6:00 a 23:00. Después puedes cambiar su horario.</p>
+        }
+        @if (errorForm()) { <p class="alerta-error" role="alert">{{ errorForm() }}</p> }
+        <div class="acciones">
+        <button type="submit" [disabled]="guardando()">{{ guardando() ? 'Guardando...' : 'Guardar' }}</button>
+        <button type="button" class="secundario" (click)="cancelarForm()">Cancelar</button>
+        </div>
+    </form>
+    }
+
+    <!-- ========== Horario semanal (HU-10) ========== -->
+    @if (horarioDe(); as c) {
+    <section class="tarjeta panel" aria-label="Horario">
+        <h2>Horario de {{ c.nombre }}</h2>
+        <p class="ayuda">Desmarca un día para dejar la cancha cerrada. Se reserva por franjas de una hora.</p>
+        <div class="tabla-caja">
+        <table class="horario">
+            <thead><tr><th>Día</th><th>Abierto</th><th>Apertura</th><th>Cierre</th><th class="derecha">Franjas</th></tr></thead>
+            <tbody>
+            @for (d of dias(); track d.diaSemana) {
+                <tr [class.cerrado]="!d.abierto">
+                <td class="principal">{{ d.nombre }}</td>
+                <td><input type="checkbox" class="check" [name]="'abierto' + d.diaSemana" [(ngModel)]="d.abierto"
+                           [attr.aria-label]="'Abierto el ' + d.nombre"></td>
+                <td><input type="time" step="3600" [name]="'apertura' + d.diaSemana" [(ngModel)]="d.apertura" [disabled]="!d.abierto"></td>
+                <td><input type="time" step="3600" [name]="'cierre' + d.diaSemana" [(ngModel)]="d.cierre" [disabled]="!d.abierto"></td>
+                <td class="derecha">{{ d.abierto ? franjas(d) : 'Cerrado' }}</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        </div>
+        @if (errorHorario()) { <p class="alerta-error" role="alert">{{ errorHorario() }}</p> }
+        <div class="acciones">
+        <button type="button" (click)="guardarHorario()">Guardar horario</button>
+        <button type="button" class="secundario" (click)="cerrarHorario()">Cancelar</button>
+        </div>
+    </section>
+    }
+
+    <!-- ========== Lista de canchas ========== -->
+    @if (cargando()) {
+    <p class="estado">Cargando canchas...</p>
+    } @else {
+    <div class="tabla-caja">
+        <table>
+        <thead>
+            <tr><th>Cancha</th><th>Tipo</th><th class="derecha">Diurna</th><th class="derecha">Nocturna</th><th>Estado</th><th>Acciones</th></tr>
+        </thead>
+        <tbody>
+            @for (c of canchas(); track c.id) {
+            <tr>
+                <td><span class="principal">{{ c.nombre }}</span>
+                    @if (c.descripcion) { <span class="secundario-texto">{{ c.descripcion }}</span> }</td>
+                <td>{{ c.tipo }}</td>
+                <td class="derecha">{{ precio(c.tarifaDiurna) }}</td>
+                <td class="derecha">{{ precio(c.tarifaNocturna) }}</td>
+                <td><span class="badge" [class.activa]="c.activa" [class.inactiva]="!c.activa">{{ c.activa ? 'Activa' : 'Desactivada' }}</span></td>
+                <td class="botones">
+                <button type="button" class="secundario mini" (click)="editar(c)">Editar</button>
+                <button type="button" class="secundario mini" (click)="abrirHorario(c)">Horario</button>
+                <button type="button" class="mini" [class.peligro]="c.activa" [class.secundario]="!c.activa" (click)="cambiarEstado(c)">
+                    {{ c.activa ? 'Desactivar' : 'Activar' }}
+                </button>
+                </td>
+            </tr>
+            } @empty {
+            <tr><td colspan="6" class="vacio">Todavía no hay canchas. Crea la primera con “+ Nueva cancha”.</td></tr>
+            }
+        </tbody>
+        </table>
+    </div>
+    }
