@@ -8,6 +8,7 @@ import { MisReservasComponent } from './pages/mis-reservas/mis-reservas.componen
 import { AdminComponent } from './pages/admin/admin.component';
 import { ConfirmarReservaComponent } from './pages/confirmar-reserva/confirmar-reserva.component';
 import { HorariosComponent } from './pages/horarios/horarios.component';
+import { AdminCanchasComponent } from './pages/admin-canchas/admin-canchas.component';
 
 export const routes: Routes = [
   { path: '', component: InicioComponent },
@@ -16,6 +17,7 @@ export const routes: Routes = [
   { path: 'canchas', component: CanchasComponent, canActivate: [authGuard] },
   { path: 'mis-reservas', component: MisReservasComponent, canActivate: [rolGuard('CLIENTE')] },
   { path: 'admin', component: AdminComponent, canActivate: [rolGuard('ADMIN')] },
+  { path: 'admin/canchas', component: AdminCanchasComponent, canActivate: [rolGuard('ADMIN')] },
   { path: 'canchas/:id/horarios', component: HorariosComponent, canActivate: [authGuard] },
   { path: 'reservas/confirmar', component: ConfirmarReservaComponent, canActivate: [rolGuard('CLIENTE')] },
   { path: '**', redirectTo: '' }
