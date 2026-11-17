@@ -1,0 +1,127 @@
+    <!-- ========== Encabezado ========== -->
+    <div class="encabezado">
+    <span class="etiqueta">PANEL DE ADMINISTRACIÓN</span>
+    <h1>Todas las reservas</h1>
+    <p>Consulta y gestiona las reservas de todos los clientes.</p>
+    </div>
+
+    <!-- ========== Resumen ========== -->
+    <section class="resumen" aria-label="Resumen">
+    <div class="tarjeta dato">
+        <span class="dato-rotulo">Reservas</span>
+        <span class="dato-valor">{{ resumen().total }}</span>
+    </div>
+    <div class="tarjeta dato">
+        <span class="dato-rotulo">Confirmadas</span>
+        <span class="dato-valor verde">{{ resumen().confirmadas }}</span>
+    </div>
+    <div class="tarjeta dato">
+        <span class="dato-rotulo">Canceladas</span>
+        <span class="dato-valor">{{ resumen().canceladas }}</span>
+    </div>
+    <div class="tarjeta dato">
+        <span class="dato-rotulo">Ingresos confirmados</span>
+        <span class="dato-valor">{{ precio(resumen().ingresos) }}</span>
+    </div>
+    </section>
+
+    <!-- ========== Filtros ========== -->
+    <section class="tarjeta filtros" aria-label="Filtros">
+    <div class="campo">
+        <label for="f-fecha">Fecha</label>
+        <input id="f-fecha" type="date" [value]="filtros().fecha" (change)="cambiarFiltro('fecha', $event)">
+    </div>
+
+    <div class="campo">
+        <label for="f-cancha">Cancha</label>
+        <select id="f-cancha" [value]="filtros().canchaId" (change)="cambiarFiltro('canchaId', $event)">
+        <option value="">Todas</option>
+        @for (c of canchas(); track c.id) {
+            <option [value]="c.id">{{ c.nombre }}</option>
+        }
+        </select>
+    </div>
+
+    <div class="campo">
+        <label for="f-estado">Estado</label>
+        <select id="f-estado" [value]="filtros().estado" (change)="cambiarFiltro('estado', $event)">
+        <option value="">Todos</option>
+        <option value="CONFIRMADA">Confirmadas</option>
+        <option value="CANCELADA">Canceladas</option>
+        </select>
+    </div>
+
+    <div class="botones">
+        <button type="button" class="secundario" (click)="verHoy()">Hoy</button>
+        <button type="button" class="secundario" [disabled]="!hayFiltros()" (click)="limpiar()">Limpiar</button>
+    </div>
+    </section>
+
+    @if (mensaje()) {
+    <p class="exito" role="status">{{ mensaje() }}</p>
+    }
+    @if (error()) {
+    <p class="alerta-error" role="alert">{{ error() }}</p>
+    }
+
+    <!-- ========== Tabla ========== -->
+    @if (cargando()) {
+    <p class="estado">Cargando reservas...</p>
+    } @else if (filas().length === 0) {
+    <div class="tarjeta vacio">
+        <p>{{ hayFiltros() ? 'No hay reservas con esos filtros.' : 'Todavía no hay reservas.' }}</p>
+    </div>
+    } @else {
+    <div class="tabla-caja">
+        <table>
+        <thead>
+            <tr>
+            <th scope="col">Código</th>
+            <th scope="col">Cliente</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col">Cancha</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Hora</th>
+            <th scope="col">Valor</th>
+            <th scope="col">Estado</th>
+            <th scope="col" class="derecha">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (f of filas(); track f.id) {
+            <tr>
+                <td class="tenue">{{ f.codigo }}</td>
+                <td>
+                <span class="principal">{{ f.cliente }}</span>
+                <span class="secundario-texto">{{ f.correo }}</span>
+                </td>
+                <td>{{ f.telefono }}</td>
+                <td>
+                <span class="principal">{{ f.cancha }}</span>
+                <span class="secundario-texto">{{ f.tipo }}</span>
+                </td>
+                <td class="capital">{{ fechaCorta(f.fecha) }}</td>
+                <td>{{ f.horaInicio }} – {{ f.horaFin }}</td>
+                <td>{{ precio(f.valor) }}</td>
+                <td><span class="badge {{ f.claseEstado }}">{{ f.estadoTexto }}</span></td>
+                <td class="derecha">
+                @if (f.cancelable) {
+                    @if (confirmandoId() === f.id) {
+                    <div class="confirmar">
+                        <span>¿Seguro?</span>
+                        <button type="button" class="peligro mini" [disabled]="cancelandoId() === f.id" (click)="cancelar(f)">
+                        {{ cancelandoId() === f.id ? 'Cancelando...' : 'Sí, cancelar' }}
+                        </button>
+                        <button type="button" class="secundario mini" (click)="confirmandoId.set(null)">No</button>
+                    </div>
+                    } @else {
+                    <button type="button" class="secundario mini" (click)="confirmandoId.set(f.id)">Cancelar</button>
+                    }
+                }
+                </td>
+            </tr>
+            }
+        </tbody>
+        </table>
+    </div>
+    }
